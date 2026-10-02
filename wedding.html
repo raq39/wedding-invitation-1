@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Alina & Karim — Wedding Invitation</title>
+  <!-- Google Fonts for Luxury & Script typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --sage-bg: #c5d2c8;
+      --sage-dark: #8b9d8f;
+      --cream-bg: #faf7f2;
+      --card-inner: #fffdfa;
+      --gold: #bfa15f;
+      --gold-dark: #917537;
+      --text-dark: #2c2927;
+      --text-muted: #5e5a56;
+      --blush: #e8c8c2;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background: #eef2ed;
+      font-family: 'Playfair Display', serif;
+      color: var(--text-dark);
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* Mobile Container Wrapper */
+    .app-viewport {
+      width: 100%;
+      max-width: 440px;
+      min-height: 100vh;
+      background: var(--cream-bg);
+      position: relative;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.12);
+      overflow: hidden;
+    }
+
+    /* =========================================
+       GATEFOLD OVERLAY (Tap to Open)
+       ========================================= */
+    #gatefold-wrapper {
+      position: fixed;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 440px;
+      height: 100vh;
+      z-index: 9999;
+      display: flex;
+      pointer-events: auto;
+      transition: opacity 0.8s ease 0.8s, visibility 0.8s ease 0.8s;
+    }
+
+    #gatefold-wrapper.opened {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .door {
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(135deg, #c7d5cb 0%, #b3c2b8 100%);
+      position: absolute;
+      top: 0;
+      transition: transform 1.2s cubic-bezier(0.77, 0, 0.175, 1);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px 12px;
+      box-shadow: inset 0 0 40px rgba(0,0,0,0.06);
+    }
+
+    .door-left {
+      left: 0;
+      border-right: 1.5px solid rgba(191, 161, 95, 0.45);
+    }
+    .door-right {
+      right: 0;
+      border-left: 1.5px solid rgba(191, 161, 95, 0.45);
+    }
+
+    #gatefold-wrapper.opened .door-left {
+      transform: translateX(-100%);
+    }
+    #gatefold-wrapper.opened .door-right {
+      transform: translateX(100%);
+    }
+
+    /* Floral Corner Graphic Accents */
+    .gate-floral {
+      font-size: 32px;
+      opacity: 0.55;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    }
+    .door-left .top-flower { align-self: flex-start; }
+    .door-left .bot-flower { align-self: flex-start; }
+    .door-right .top-flower { align-self: flex-end; }
+    .door-right .bot-flower { align-self: flex-end; }
+
+    /* Center Wax Seal Badge */
+    .wax-seal {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, #fffdf8 30%, #f4ede0 100%);
+      border: 3px double var(--gold);
+      border-radius: 50%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18), inset 0 0 10px rgba(191,161,95,0.25);
+      cursor: pointer;
+      z-index: 10000;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      animation: pulse 2.4s infinite;
+    }
+
+    .wax-seal:hover {
+      transform: translate(-50%, -50%) scale(1.05);
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.04); box-shadow: 0 12px 30px rgba(191,161,95,0.4); }
+    }
+
+    .seal-monogram {
+      font-family: 'Great Vibes', cursive;
+      font-size: 34px;
+      color: var(--gold-dark);
+      line-height: 1;
+      margin-bottom: 3px;
+    }
+
+    .seal-text {
+      font-family: 'Cinzel', serif;
+      font-size: 9px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-dark);
+      font-weight: 600;
+    }
+
+    /* Floating Music Toggle */
+    .music-btn {
+      position: fixed;
+      bottom: 20px;
+      right: calc(50% - 200px);
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1.5px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      cursor: pointer;
+      z-index: 99999;
+      font-size: 18px;
+    }
+    @media (max-width: 440px) {
+      .music-btn { right: 18px; }
+    }
+
+    /* =========================================
+       MAIN INVITATION CONTENT
+       ========================================= */
+    .content-scroll {
+      padding: 30px 18px 80px;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 1s ease 0.6s, transform 1s ease 0.6s;
+    }
+
+    #gatefold-wrapper.opened ~ .content-scroll {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Arch-Style Floral Main Card */
+    .arch-card {
+      background: var(--card-inner);
+      border-radius: 200px 200px 24px 24px;
+      border: 2px solid #ecd8b3;
+      padding: 40px 22px 32px;
+      text-align: center;
+      position: relative;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+      margin-bottom: 24px;
+    }
+
+    .arch-card::before {
+      content: "";
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      right: 6px;
+      bottom: 6px;
+      border-radius: 194px 194px 18px 18px;
+      border: 1px dashed rgba(191, 161, 95, 0.5);
+      pointer-events: none;
+    }
+
+    .floral-top {
+      font-size: 34px;
+      margin-bottom: 10px;
+      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.08));
+    }
+
+    .bismillah {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      color: var(--gold-dark);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    .bismillah-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+      font-style: italic;
+    }
+
+    .parents-note {
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+    }
+
+    .parents-note strong {
+      color: var(--text-dark);
+      font-weight: 600;
+    }
+
+    .couple-title {
+      font-family: 'Great Vibes', cursive;
+      font-size: 44px;
+      color: #3b322a;
+      line-height: 1.1;
+      margin: 4px 0;
+    }
+
+    .parentage {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 10.5px;
+      color: #6a6662;
+      margin-bottom: 12px;
+      letter-spacing: 0.3px;
+    }
+
+    .weds-badge {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin: 12px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .weds-badge::before, .weds-badge::after {
+      content: "";
+      width: 32px;
+      height: 1px;
+      background: var(--gold);
+      opacity: 0.6;
+    }
+
+    .card-footer-quote {
+      font-size: 13px;
+      font-style: italic;
+      color: var(--text-muted);
+      margin-top: 24px;
+      line-height: 1.5;
+    }
+
+    /* =========================================
+       SCRATCH TO REVEAL CARD
+       ========================================= */
+    .section-card {
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 26px 20px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.04);
+      border: 1px solid #ebedea;
+      margin-bottom: 22px;
+    }
+
+    .section-heading {
+      font-family: 'Cinzel', serif;
+      font-size: 15px;
+      letter-spacing: 2px;
+      color: var(--gold-dark);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .scratch-container {
+      position: relative;
+      width: 250px;
+      height: 150px;
+      margin: 0 auto 10px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      user-select: none;
+    }
+
+    .scratch-secret {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #fff9f2 0%, #f6ece0 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 2px dashed #d8be8d;
+      border-radius: 16px;
+      padding: 10px;
+    }
+
+    .scratch-secret h4 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 28px;
+      color: var(--gold-dark);
+    }
+    .scratch-secret p {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-dark);
+      margin-top: 4px;
+    }
+    .scratch-secret span {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    #scratch-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      cursor: crosshair;
+      touch-action: none;
+    }
+
+    .scratch-instruction {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      color: #8c8985;
+      margin-top: 6px;
+    }
+
+    /* =========================================
+       COUNTDOWN TIMER
+       ========================================= */
+    .countdown-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-top: 14px;
+    }
+
+    .time-box {
+      background: #fbf9f6;
+      border: 1px solid #ebd9b8;
+      border-radius: 12px;
+      padding: 12px 4px;
+    }
+
+    .time-val {
+      font-family: 'Cinzel', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--gold-dark);
+    }
+
+    .time-lbl {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* =========================================
+       EVENT TIMELINE & DETAILS
+       ========================================= */
+    .event-card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 22px 18px;
+      margin-bottom: 16px;
+      border-left: 4px solid var(--gold);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      text-align: left;
+    }
+
+    .event-badge {
+      display: inline-block;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 4px 8px;
+      background: #f4eee1;
+      color: var(--gold-dark);
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+
+    .event-name {
+      font-family: 'Cinzel', serif;
+      font-size: 17px;
+      color: var(--text-dark);
+      margin-bottom: 6px;
+    }
+
+    .event-info {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 4px;
+    }
+
+    .event-info strong {
+      color: var(--text-dark);
+    }
+
+    .map-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 12px;
+      padding: 8px 14px;
+      background: #fbfaf8;
+      border: 1px solid var(--gold);
+      border-radius: 20px;
+      color: var(--gold-dark);
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
+    .map-btn:hover {
+      background: var(--gold);
+      color: #fff;
+    }
+
+    /* Subtle Botanical Flourish */
+    .floral-accent {
+      text-align: center;
+      font-size: 20px;
+      color: var(--gold);
+      margin: 18px 0;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-viewport">
+
+    <!-- =========================================
+         GATEFOLD ENVELOPE (COVER)
+         ========================================= -->
+    <div id="gatefold-wrapper">
+      <!-- Left Door -->
+      <div class="door door-left">
+        <span class="gate-floral top-flower">🌸</span>
+        <span class="gate-floral bot-flower">🌿</span>
+      </div>
+
+      <!-- Center AK Monogram Wax Seal -->
+      <div class="wax-seal" id="open-seal-btn" title="Tap to open the invitation">
+        <div class="seal-monogram">AK</div>
+        <div class="seal-text">Tap to Open</div>
+      </div>
+
+      <!-- Right Door -->
+      <div class="door door-right">
+        <span class="gate-floral top-flower">🌸</span>
+        <span class="gate-floral bot-flower">🌿</span>
+      </div>
+    </div>
+
+    <!-- Floating Music Toggle -->
+    <button class="music-btn" id="audio-toggle-btn" title="Toggle Music">🎵</button>
+
+    <!-- Native HTML5 Audio Tag -->
+    <audio id="bg-music" loop preload="auto">
+      <source src="song.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- =========================================
+         INVITATION BODY CONTENT
+         ========================================= -->
+    <main class="content-scroll">
+      
+      <!-- MAIN ARCH CARD (Physical Card Design) -->
+      <section class="arch-card">
+        <div class="floral-top">🌸 🌿 🌸</div>
+        <div class="bismillah">In the name of Allah</div>
+        <div class="bismillah-sub">The Most Beneficent, The Most Merciful</div>
+
+        <p class="parents-note">
+          <strong>Mrs. & Mr. Muzaffar Nova Agha</strong><br />
+          feels immense pleasure to have your kind presence at the Wedding Ceremony of their beloved daughter
+        </p>
+
+        <!-- Bride -->
+        <h2 class="couple-title">Alina Agha</h2>
+        <p class="parentage">(D/o. Mr. Muzaffar Nova Agha and Mrs. Seema Muzaffar Agha)</p>
+
+        <div class="weds-badge">With</div>
+
+        <!-- Groom -->
+        <h2 class="couple-title">Karim Ali Khan</h2>
+        <p class="parentage">(S/o. Mr. Nisar Khan and Mrs. Fatima Bi. Khan)</p>
+
+        <div class="floral-accent">✦ ❧ ✦</div>
+
+        <p class="card-footer-quote">
+          "Please grace us with your presence and keep us in your sincerest prayers.<br />
+          Your presence, prayers, and blessings will make our celebration truly complete."
+        </p>
+      </section>
+
+      <!-- SCRATCH TO REVEAL CARD -->
+      <section class="section-card">
+        <h3 class="section-heading">Scratch to Reveal</h3>
+        <div class="scratch-container">
+          <div class="scratch-secret">
+            <h4>Save The Date</h4>
+            <p>13th &amp; 15th November 2026</p>
+            <span>Alina &amp; Karim's Wedding</span>
+          </div>
+          <canvas id="scratch-canvas" width="250" height="150"></canvas>
+        </div>
+        <p class="scratch-instruction">Scratch the gold card above with your finger</p>
+      </section>
+
+      <!-- COUNTDOWN TIMER -->
+      <section class="section-card">
+        <h3 class="section-heading">Counting Down to Forever</h3>
+        <div class="countdown-grid">
+          <div class="time-box">
+            <div class="time-val" id="cd-days">00</div>
+            <div class="time-lbl">Days</div>
+          </div>
+          <div class="time-box">
+            <div class="time-val" id="cd-hours">00</div>
+            <div class="time-lbl">Hours</div>
+          </div>
+          <div class="time-box">
+            <div class="time-val" id="cd-mins">00</div>
+            <div class="time-lbl">Mins</div>
+          </div>
+          <div class="time-box">
+            <div class="time-val" id="cd-secs">00</div>
+            <div class="time-lbl">Secs</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- EVENTS TIMELINE -->
+      <h3 class="section-heading" style="text-align: center; margin: 28px 0 16px;">Program Timeline</h3>
+
+      <!-- 1. Nikah -->
+      <div class="event-card">
+        <span class="event-badge">Ceremony</span>
+        <h4 class="event-name">Insha Allah Nikah</h4>
+        <p class="event-info">📅 <strong>Friday, 13th November 2026</strong> (3rd Jamad-al-Sani 1448 AH)</p>
+        <p class="event-info">⏰ <strong>8:00 AM</strong></p>
+        <p class="event-info">📍 <strong>Nesai Masjid</strong></p>
+        <a href="https://maps.google.com/?q=Nesai+Masjid+Goa" target="_blank" class="map-btn">
+          📍 View on Google Maps
+        </a>
+      </div>
+
+      <!-- 2. Reception -->
+      <div class="event-card">
+        <span class="event-badge">Celebration</span>
+        <h4 class="event-name">Wedding Reception</h4>
+        <p class="event-info">📅 <strong>Friday, 13th November 2026</strong></p>
+        <p class="event-info">⏰ <strong>7:00 PM onwards</strong></p>
+        <p class="event-info">📍 <strong>Royal Paradise Hall</strong>, Mugali, Madgaon - Goa</p>
+        <a href="https://maps.google.com/?q=Royal+Paradise+Hall+Mugali+Madgaon+Goa" target="_blank" class="map-btn">
+          📍 View on Google Maps
+        </a>
+      </div>
+
+      <!-- 3. Walima -->
+      <div class="event-card">
+        <span class="event-badge">Walima Ceremony</span>
+        <h4 class="event-name">Walima Ceremony</h4>
+        <p class="event-info">📅 <strong>Sunday, 15th November 2026</strong> (5 Jamad-al-Sani 1448 AH)</p>
+        <p class="event-info">⏰ <strong>7:00 PM onwards</strong></p>
+        <p class="event-info">📍 <strong>Celebration Open Air</strong>, Dhavali Farmagudi Bypass Road, Opp. VRL Logistics, Ponda - Goa</p>
+        <a href="https://maps.google.com/?q=Celebration+Open+Air+Dhavali+Farmagudi+Bypass+Ponda+Goa" target="_blank" class="map-btn">
+          📍 View on Google Maps
+        </a>
+      </div>
+
+      <div class="floral-accent" style="margin-top: 30px;">🌸 ❧ 🌸</div>
+      <p style="text-align: center; font-size: 12px; color: var(--text-muted); font-family: 'Montserrat', sans-serif;">
+        With Best Compliments from Family &amp; Friends
+      </p>
+
+    </main>
+  </div>
+
+  <script>
+    /* -------------------------------------------------------------
+       1. Robust HTML5 Audio Controls
+       ------------------------------------------------------------- */
+    const audio = document.getElementById('bg-music');
+    const audioBtn = document.getElementById('audio-toggle-btn');
+    let isPlaying = false;
+
+    function startAudio() {
+      audio.load();
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          isPlaying = true;
+          audioBtn.innerHTML = '🔊';
+        }).catch((err) => {
+          console.warn('Playback error / blocked by browser:', err);
+          isPlaying = false;
+          audioBtn.innerHTML = '🔇';
+        });
+      }
+    }
+
+    function toggleMusic(e) {
+      if (e) e.stopPropagation();
+      if (isPlaying) {
+        audio.pause();
+        isPlaying = false;
+        audioBtn.innerHTML = '🔇';
+      } else {
+        startAudio();
+      }
+    }
+
+    audioBtn.addEventListener('click', toggleMusic);
+
+    /* -------------------------------------------------------------
+       2. Gatefold Opening Interaction
+       ------------------------------------------------------------- */
+    const openSealBtn = document.getElementById('open-seal-btn');
+    const gatefold = document.getElementById('gatefold-wrapper');
+
+    openSealBtn.addEventListener('click', () => {
+      gatefold.classList.add('opened');
+      startAudio();
+      initScratchCard();
+    });
+
+    /* -------------------------------------------------------------
+       3. Scratch-To-Reveal Card (HTML5 Canvas)
+       ------------------------------------------------------------- */
+    function initScratchCard() {
+      const canvas = document.getElementById('scratch-canvas');
+      const ctx = canvas.getContext('2d');
+      const width = canvas.width;
+      const height = canvas.height;
+
+      // Draw Gold Foil Surface
+      const grad = ctx.createLinearGradient(0, 0, width, height);
+      grad.addColorStop(0, '#c7a75c');
+      grad.addColorStop(0.5, '#f5e4b8');
+      grad.addColorStop(1, '#a8893d');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, width, height);
+
+      // Add Foil Sparkle Text
+      ctx.font = '600 13px Cinzel, serif';
+      ctx.fillStyle = '#4a3b18';
+      ctx.textAlign = 'center';
+      ctx.fillText('✨ SCRATCH HERE ✨', width / 2, height / 2 + 5);
+
+      let isDrawing = false;
+
+      function scratch(e) {
+        if (!isDrawing) return;
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        const x = (clientX - rect.left) * (canvas.width / rect.width);
+        const y = (clientY - rect.top) * (canvas.height / rect.height);
+
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(x, y, 16, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      canvas.addEventListener('mousedown', (e) => { isDrawing = true; scratch(e); });
+      canvas.addEventListener('mousemove', scratch);
+      window.addEventListener('mouseup', () => { isDrawing = false; });
+
+      canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); }, { passive: true });
+      canvas.addEventListener('touchmove', scratch, { passive: true });
+      window.addEventListener('touchend', () => { isDrawing = false; });
+    }
+
+    /* -------------------------------------------------------------
+       4. Countdown Timer to November 13, 2026, 08:00:00
+       ------------------------------------------------------------- */
+    const weddingDate = new Date('November 13, 2026 08:00:00').getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = weddingDate - now;
+
+      if (distance < 0) {
+        document.getElementById('cd-days').innerText = '00';
+        document.getElementById('cd-hours').innerText = '00';
+        document.getElementById('cd-mins').innerText = '00';
+        document.getElementById('cd-secs').innerText = '00';
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById('cd-days').innerText = String(days).padStart(2, '0');
+      document.getElementById('cd-hours').innerText = String(hours).padStart(2, '0');
+      document.getElementById('cd-mins').innerText = String(minutes).padStart(2, '0');
+      document.getElementById('cd-secs').innerText = String(seconds).padStart(2, '0');
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
+</body>
+</html>
